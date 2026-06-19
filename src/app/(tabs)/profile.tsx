@@ -43,7 +43,7 @@ export default function ProfileScreen() {
         >
           <View className="relative">
             <Image
-              source={require("../../../assets/logo.png")}
+              source={require("../../../assets/1.jpeg")}
               style={{ width: 100, height: 100, borderRadius: 50 }}
               contentFit="cover"
             />

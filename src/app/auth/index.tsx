@@ -22,7 +22,7 @@ export default function AuthScreen() {
       </Animated.View>
 
       {/* Auth content */}
-      <View className="flex-1 px-6 gap-3">
+      <View className="flex-1 px-6 gap-3 pb-6">
         {/* Copy */}
         <Animated.View
           className="items-center"
@@ -55,7 +55,7 @@ export default function AuthScreen() {
         </Animated.View>
 
         {/* Google sign-in button */}
-        <Animated.View style={{ opacity: btnOpacity, transform: [{ translateY: btnTranslateY }] }}>
+        <Animated.View style={{ opacity: btnOpacity, transform: [{ translateY: btnTranslateY }], marginTop: "auto" }}>
           <TouchableOpacity
             className="bg-white flex-row items-center justify-center px-6 gap-3 rounded-full py-[18px]"
             style={{

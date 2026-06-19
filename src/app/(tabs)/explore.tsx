@@ -251,6 +251,7 @@ export default function ExploreScreen() {
                   return (
                     <View key={rowIndex} className="flex-row gap-4">
                       <RecommendationCard
+                        key={left.id}
                         id={left.id}
                         name={left.name}
                         location={left.location}
@@ -262,6 +263,7 @@ export default function ExploreScreen() {
                       />
                       {right ? (
                         <RecommendationCard
+                          key={right.id}
                           id={right.id}
                           name={right.name}
                           location={right.location}

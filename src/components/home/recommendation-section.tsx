@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useMemo, useState } from "react";
 import { Animated, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
 import { FilterValues } from "../explore/filter-modal";
 import { useFadeSlideIn } from "../../hooks/use-animations";
 import RecommendationCard from "./recommendation-card";
@@ -70,6 +71,7 @@ interface RecommendationSectionProps {
 }
 
 export default function RecommendationSection({ searchQuery = "", activeFilters }: RecommendationSectionProps) {
+  const router = useRouter();
   const [activeFilter, setActiveFilter] = useState("All");
   const { opacity: headerOpacity, translateY: headerTranslateY } = useFadeSlideIn(0);
 
@@ -94,7 +96,7 @@ export default function RecommendationSection({ searchQuery = "", activeFilters 
         <Text className="font-rubik-bold text-black-russian text-xl">
           Our Recommendation
         </Text>
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => router.push("/(tabs)/explore")}>
           <Text className="font-rubik-medium text-purple text-sm">See All</Text>
         </TouchableOpacity>
       </Animated.View>
@@ -146,6 +148,7 @@ export default function RecommendationSection({ searchQuery = "", activeFilters 
           return (
             <View key={rowIndex} className="flex-row gap-4">
               <RecommendationCard
+                key={left.id}
                 id={left.id}
                 name={left.name}
                 location={left.location}
@@ -157,6 +160,7 @@ export default function RecommendationSection({ searchQuery = "", activeFilters 
               />
               {right ? (
                 <RecommendationCard
+                  key={right.id}
                   id={right.id}
                   name={right.name}
                   location={right.location}

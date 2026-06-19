@@ -194,7 +194,7 @@ export default function RangeSlider({
           </Text>
           <Text
             className="font-rubik-medium text-purple text-sm absolute"
-            style={{ left: highX }}
+            style={{ right: trackWidth - highX - THUMB }}
           >
             {prefix}
             {high.toLocaleString()}

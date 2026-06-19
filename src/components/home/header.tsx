@@ -15,7 +15,7 @@ export default function HomeHeader({ query, onQueryChange, onFilterPress }: Home
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-3">
           <Image
-            source={require("../../../assets/logo.png")}
+            source={require("../../../assets/1.jpeg")}
             style={{ width: 48, height: 48, borderRadius: 24 }}
             contentFit="cover"
           />

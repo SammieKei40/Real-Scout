@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useMemo } from "react";
 import { Animated, FlatList, Text, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
 import { FilterValues } from "../explore/filter-modal";
 import { useFadeSlideIn } from "../../hooks/use-animations";
 import FeaturedCard from "./featured-card";
@@ -68,6 +69,7 @@ interface FeaturedSectionProps {
 }
 
 export default function FeaturedSection({ searchQuery = "", activeFilters }: FeaturedSectionProps) {
+  const router = useRouter();
   const { opacity: headerOpacity, translateY: headerTranslateY } = useFadeSlideIn(0);
 
   const filtered = useMemo(() => {
@@ -89,7 +91,7 @@ export default function FeaturedSection({ searchQuery = "", activeFilters }: Fea
         style={{ opacity: headerOpacity, transform: [{ translateY: headerTranslateY }] }}
       >
         <Text className="font-rubik-semibold text-black-russian text-xl">Featured</Text>
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => router.push("/(tabs)/explore")}>
           <Text className="font-rubik-medium text-purple text-sm">See All</Text>
         </TouchableOpacity>
       </Animated.View>

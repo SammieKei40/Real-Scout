@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/logo.png",
-      "bundleIdentifier": "com.sammie-kei.RealScout"
+      "bundleIdentifier": "com.sammie-kei.RealScout",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
