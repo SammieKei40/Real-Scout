@@ -51,11 +51,7 @@ export default function RecommendationCard({
           transform: [{ translateY }, { scale }],
           borderRadius: 16,
           backgroundColor: "white",
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.08,
-          shadowRadius: 8,
-          elevation: 4,
+          elevation: 0.3,
         }}
       >
         {/* Inner clip for image corners */}

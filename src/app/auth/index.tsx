@@ -13,16 +13,16 @@ export default function AuthScreen() {
   return (
     <SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-white">
       {/* House image */}
-      <Animated.View style={{ opacity: imageOpacity }}>
+      <Animated.View style={{ opacity: imageOpacity, width: "100%", alignItems: "center" }}>
         <Image
           source={require("../../../assets/house-scout.png")}
-          style={{ width: 399, height: 552, borderRadius: 12 }}
+          style={{ width: "100%", height: 552, borderRadius: 12 }}
           resizeMode="cover"
         />
       </Animated.View>
 
       {/* Auth content */}
-      <View className="flex-1 px-6 justify-between">
+      <View className="flex-1 px-6 gap-3">
         {/* Copy */}
         <Animated.View
           className="items-center"
@@ -57,8 +57,13 @@ export default function AuthScreen() {
         {/* Google sign-in button */}
         <Animated.View style={{ opacity: btnOpacity, transform: [{ translateY: btnTranslateY }] }}>
           <TouchableOpacity
-            className="flex-row items-center justify-center px-6 gap-3 !rounded-full py-[18px] bg-white shadow-card"
-            activeOpacity={0.7}
+            className="bg-white flex-row items-center justify-center px-6 gap-3 rounded-full py-[18px]"
+            style={{
+              backgroundColor: "#ffffff",
+              shadowOpacity: 0.2,
+              shadowRadius: 60,
+              elevation: 1,
+            }}
             onPress={() => router.replace("/(tabs)")}
           >
             <GoogleIcon />

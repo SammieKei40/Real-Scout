@@ -13,9 +13,11 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE"
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#ffffff"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.sammie_kei.RealScout"
     },
     "web": {
       "bundler": "metro"
@@ -27,17 +29,19 @@
         {
           "backgroundColor": "#ffffff",
           "image": "./assets/logo.png",
-          "imageWidth": 200,
-          "dark": {
-            "backgroundColor": "#121212",
-            "image": "./assets/logo.png"
-          }
+          "imageWidth": 200
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a5192e43-40a0-4e32-97b3-d7fb4951a3ed"
+      }
     }
   }
 }
