@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { Animated, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MenuItem from "../../components/profile/menu-item";
@@ -10,6 +11,7 @@ function Divider() {
 }
 
 export default function ProfileScreen() {
+  const router = useRouter();
   const { opacity: headerOpacity, translateY: headerTranslateY } = useFadeSlideIn(0);
   const { scale: avatarScale, opacity: avatarOpacity } = usePopIn(80);
   const { opacity: group1Opacity, translateY: group1TranslateY } = useFadeSlideIn(220);
@@ -91,7 +93,7 @@ export default function ProfileScreen() {
             <MenuItem icon="information-circle-outline" label="Help Center" />
             <MenuItem icon="people-outline" label="Invite Friends" />
 
-            <MenuItem icon="log-out-outline" label="Logout" isLogout />
+            <MenuItem icon="log-out-outline" label="Logout" isLogout onPress={() => router.replace("/auth")} />
           </Animated.View>
         </View>
       </ScrollView>
