@@ -3,8 +3,9 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Animated, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useFadeIn, useFadeSlideIn } from "../../hooks/use-animations";
 
 // ─── Image lookup by property id ───────────────────────────────────────────
 const PROPERTY_IMAGES: Record<string, ReturnType<typeof require>> = {
@@ -82,6 +83,8 @@ export default function PropertyDetail() {
   }>();
 
   const [liked, setLiked] = useState(false);
+  const heroOpacity = useFadeIn(0);
+  const { opacity: cardOpacity, translateY: cardTranslateY } = useFadeSlideIn(160);
   const image = PROPERTY_IMAGES[id] ?? PROPERTY_IMAGES["1"] ?? "";
   const formattedPrice = Number(price).toLocaleString();
   const categoryLabel = (category ?? "Property").toUpperCase();
@@ -93,7 +96,7 @@ export default function PropertyDetail() {
         contentContainerStyle={{ paddingBottom: 100 + insets.bottom }}
       >
         {/* ── Hero image ── */}
-        <View style={{ height: 320 }}>
+        <Animated.View style={{ height: 320, opacity: heroOpacity }}>
           <Image
             source={image}
             style={{ width: "100%", height: 320 }}
@@ -146,12 +149,12 @@ export default function PropertyDetail() {
               />
             ))}
           </View>
-        </View>
+        </Animated.View>
 
         {/* ── White content card ── */}
-        <View
+        <Animated.View
           className="bg-white px-5 pt-6"
-          style={{ marginTop: -24 }}
+          style={{ marginTop: -24, opacity: cardOpacity, transform: [{ translateY: cardTranslateY }] }}
         >
           {/* Name */}
           <Text className="font-rubik-bold text-black-russian text-2xl mb-3">
@@ -334,7 +337,7 @@ export default function PropertyDetail() {
               </View>
             </View>
           </View>
-        </View>
+        </Animated.View>
       </ScrollView>
 
       {/* ── Fixed booking bar ── */}

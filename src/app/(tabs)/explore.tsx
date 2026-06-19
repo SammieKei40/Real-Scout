@@ -1,9 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Animated, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FilterModal, { FilterValues } from "../../components/explore/filter-modal";
+import { useFadeSlideIn } from "../../hooks/use-animations";
 import RecommendationCard from "../../components/home/recommendation-card";
 
 const FILTERS = ["All", "House", "Villa", "Apartments", "Others"];
@@ -130,6 +131,9 @@ export default function ExploreScreen() {
   const resultLabel =
     activeFilter === "All" ? "Properties" : activeFilter;
 
+  const { opacity: headerOpacity, translateY: headerTranslateY } = useFadeSlideIn(0);
+  const { opacity: contentOpacity, translateY: contentTranslateY } = useFadeSlideIn(120);
+
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white">
       <ScrollView
@@ -138,7 +142,10 @@ export default function ExploreScreen() {
         keyboardShouldPersistTaps="handled"
       >
         {/* Header */}
-        <View className="flex-row items-center px-5 pt-2 pb-5 gap-3">
+        <Animated.View
+          className="flex-row items-center px-5 pt-2 pb-5 gap-3"
+          style={{ opacity: headerOpacity, transform: [{ translateY: headerTranslateY }] }}
+        >
           <TouchableOpacity
             onPress={() => router.replace("/(tabs)")}
             activeOpacity={0.8}
@@ -161,9 +168,12 @@ export default function ExploreScreen() {
               style={{ borderWidth: 1.5, borderColor: "#fff" }}
             />
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
-        <View className="px-5 gap-5">
+        <Animated.View
+          className="px-5 gap-5"
+          style={{ opacity: contentOpacity, transform: [{ translateY: contentTranslateY }] }}
+        >
           {/* Search bar */}
           <View
             className="flex-row items-center bg-ghost-white rounded-xl px-4 gap-3"
@@ -248,6 +258,7 @@ export default function ExploreScreen() {
                         rating={left.rating}
                         category={left.category}
                         image={left.image}
+                        animationIndex={rowIndex}
                       />
                       {right ? (
                         <RecommendationCard
@@ -258,6 +269,7 @@ export default function ExploreScreen() {
                           rating={right.rating}
                           category={right.category}
                           image={right.image}
+                          animationIndex={rowIndex}
                         />
                       ) : (
                         <View className="flex-1" />
@@ -268,7 +280,7 @@ export default function ExploreScreen() {
               )}
             </View>
           )}
-        </View>
+        </Animated.View>
       </ScrollView>
 
       <FilterModal

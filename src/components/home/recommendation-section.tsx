@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useMemo, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Animated, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { FilterValues } from "../explore/filter-modal";
+import { useFadeSlideIn } from "../../hooks/use-animations";
 import RecommendationCard from "./recommendation-card";
 
 const FILTERS = ["All", "House", "Villa", "Apartments", "Others"];
@@ -70,6 +71,7 @@ interface RecommendationSectionProps {
 
 export default function RecommendationSection({ searchQuery = "", activeFilters }: RecommendationSectionProps) {
   const [activeFilter, setActiveFilter] = useState("All");
+  const { opacity: headerOpacity, translateY: headerTranslateY } = useFadeSlideIn(0);
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -85,14 +87,17 @@ export default function RecommendationSection({ searchQuery = "", activeFilters 
   return (
     <View className="mt-7 gap-4">
       {/* Section header */}
-      <View className="flex-row items-center justify-between px-5">
+      <Animated.View
+        className="flex-row items-center justify-between px-5"
+        style={{ opacity: headerOpacity, transform: [{ translateY: headerTranslateY }] }}
+      >
         <Text className="font-rubik-bold text-black-russian text-xl">
           Our Recommendation
         </Text>
         <TouchableOpacity activeOpacity={0.7}>
           <Text className="font-rubik-medium text-purple text-sm">See All</Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
 
       {/* Filter pills */}
       <ScrollView
@@ -148,6 +153,7 @@ export default function RecommendationSection({ searchQuery = "", activeFilters 
                 rating={left.rating}
                 category={left.category}
                 image={left.image}
+                animationIndex={rowIndex}
               />
               {right ? (
                 <RecommendationCard
@@ -158,6 +164,7 @@ export default function RecommendationSection({ searchQuery = "", activeFilters 
                   rating={right.rating}
                   category={right.category}
                   image={right.image}
+                  animationIndex={rowIndex}
                 />
               ) : (
                 <View className="flex-1" />

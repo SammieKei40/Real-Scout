@@ -1,24 +1,33 @@
 import { useRouter } from "expo-router";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Animated, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import GoogleIcon from "../../../assets/svg/google.svg";
+import { useFadeIn, useFadeSlideIn } from "../../hooks/use-animations";
 
 export default function AuthScreen() {
   const router = useRouter();
+  const imageOpacity = useFadeIn(0);
+  const { opacity: copyOpacity, translateY: copyTranslateY } = useFadeSlideIn(140);
+  const { opacity: btnOpacity, translateY: btnTranslateY } = useFadeSlideIn(320);
 
   return (
     <SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-white">
       {/* House image */}
-      <Image
-        source={require("../../../assets/house-scout.png")}
-        style={{ width: 399, height: 552, borderRadius: 12 }}
-        resizeMode="cover"
-      />
+      <Animated.View style={{ opacity: imageOpacity }}>
+        <Image
+          source={require("../../../assets/house-scout.png")}
+          style={{ width: 399, height: 552, borderRadius: 12 }}
+          resizeMode="cover"
+        />
+      </Animated.View>
 
       {/* Auth content */}
       <View className="flex-1 px-6 justify-between">
         {/* Copy */}
-        <View className="items-center">
+        <Animated.View
+          className="items-center"
+          style={{ opacity: copyOpacity, transform: [{ translateY: copyTranslateY }] }}
+        >
           <Text className="font-rubik !text-comet uppercase text-base leading-tight tracking-wider">
             Welcome to Real Scout
           </Text>
@@ -37,25 +46,27 @@ export default function AuthScreen() {
               <Text className="text-purple">Your Ideal Home</Text>
             </Text>
           </View>
-          <Text className="font-rubik text-sm !text-comet text-center"
-          
-              style={{ fontSize: 18, lineHeight: 44 }}
+          <Text
+            className="font-rubik text-sm !text-comet text-center"
+            style={{ fontSize: 18, lineHeight: 44 }}
           >
             Login to Real Scout with Google
           </Text>
-        </View>
+        </Animated.View>
 
         {/* Google sign-in button */}
-        <TouchableOpacity
-          className="flex-row items-center justify-center px-6 gap-3 !rounded-full py-[18px] bg-white shadow-card"
-          activeOpacity={0.7}
-          onPress={() => router.replace("/(tabs)")}
-        >
-          <GoogleIcon />
-          <Text className="font-rubik-medium text-lg text-black-russian">
-            Sign In with Google
-          </Text>
-        </TouchableOpacity>
+        <Animated.View style={{ opacity: btnOpacity, transform: [{ translateY: btnTranslateY }] }}>
+          <TouchableOpacity
+            className="flex-row items-center justify-center px-6 gap-3 !rounded-full py-[18px] bg-white shadow-card"
+            activeOpacity={0.7}
+            onPress={() => router.replace("/(tabs)")}
+          >
+            <GoogleIcon />
+            <Text className="font-rubik-medium text-lg text-black-russian">
+              Sign In with Google
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
       </View>
     </SafeAreaView>
   );

@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Animated, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useActiveScale } from "../../hooks/use-animations";
 
 type TabBarProps = NonNullable<React.ComponentProps<typeof Tabs>["tabBar"]> extends (
   props: infer P
@@ -15,32 +16,62 @@ const TABS: {
   activeIcon: keyof typeof Ionicons.glyphMap;
   inactiveIcon: keyof typeof Ionicons.glyphMap;
 }[] = [
-  {
-    name: "index",
-    label: "Home",
-    activeIcon: "home",
-    inactiveIcon: "home-outline",
-  },
-  {
-    name: "explore",
-    label: "Explore",
-    activeIcon: "search",
-    inactiveIcon: "search-outline",
-  },
-  {
-    name: "profile",
-    label: "Profile",
-    activeIcon: "person",
-    inactiveIcon: "person-outline",
-  },
+  { name: "index", label: "Home", activeIcon: "home", inactiveIcon: "home-outline" },
+  { name: "explore", label: "Explore", activeIcon: "search", inactiveIcon: "search-outline" },
+  { name: "profile", label: "Profile", activeIcon: "person", inactiveIcon: "person-outline" },
 ];
 
+// ─── Isolated tab item so each can own its own scale animation ─────────────
+function TabItem({
+  tab,
+  isFocused,
+  accessibilityLabel,
+  onPress,
+  onLongPress,
+}: {
+  tab: (typeof TABS)[number];
+  isFocused: boolean;
+  accessibilityLabel: string | undefined;
+  onPress: () => void;
+  onLongPress: () => void;
+}) {
+  const iconScale = useActiveScale(isFocused);
+
+  return (
+    <TouchableOpacity
+      accessibilityRole="button"
+      accessibilityState={isFocused ? { selected: true } : {}}
+      accessibilityLabel={accessibilityLabel}
+      onPress={onPress}
+      onLongPress={onLongPress}
+      activeOpacity={0.7}
+      className="flex-1 items-center justify-center py-5 gap-1.5"
+    >
+      <Animated.View style={{ transform: [{ scale: iconScale }] }}>
+        <Ionicons
+          name={isFocused ? tab.activeIcon : tab.inactiveIcon}
+          size={24}
+          color={isFocused ? "#8B5DFF" : "#666876"}
+        />
+      </Animated.View>
+      <Text
+        className={`text-xs font-rubik-medium leading-4 ${
+          isFocused ? "text-purple" : "text-comet"
+        }`}
+      >
+        {tab.label}
+      </Text>
+    
+    </TouchableOpacity>
+  );
+}
+
+// ─── Tab bar ────────────────────────────────────────────────────────────────
 export default function TabBar({ state, descriptors, navigation }: TabBarProps) {
   const insets = useSafeAreaInsets();
 
   return (
     <View
-      className=""
       style={{
         paddingBottom: insets.bottom,
         borderTopWidth: 1,
@@ -52,14 +83,13 @@ export default function TabBar({ state, descriptors, navigation }: TabBarProps) 
         paddingTop: 1,
       }}
     >
-      <View className="flex-row items-center ">
+      <View className="flex-row items-center">
         {TABS.map((tab, index) => {
           const route = state.routes[index];
-          const isFocused = state.index === index;
-
           if (!route) return null;
 
           const { options } = descriptors[route.key];
+          const isFocused = state.index === index;
 
           const onPress = () => {
             const event = navigation.emit({
@@ -77,29 +107,14 @@ export default function TabBar({ state, descriptors, navigation }: TabBarProps) 
           };
 
           return (
-            <TouchableOpacity
+            <TabItem
               key={tab.name}
-              accessibilityRole="button"
-              accessibilityState={isFocused ? { selected: true } : {}}
+              tab={tab}
+              isFocused={isFocused}
               accessibilityLabel={options.tabBarAccessibilityLabel}
               onPress={onPress}
               onLongPress={onLongPress}
-              activeOpacity={0.7}
-              className="flex-1 items-center justify-center py-5 gap-2"
-            >
-              <Ionicons
-                name={isFocused ? tab.activeIcon : tab.inactiveIcon}
-                size={24}
-                color={isFocused ? "#8B5DFF" : "#666876"}
-              />
-              <Text
-                className={`text-xs font-rubik-medium leading-4 ${
-                  isFocused ? " text-purple" : " text-comet"
-                }`}
-              >
-                {tab.label}
-              </Text>
-            </TouchableOpacity>
+            />
           );
         })}
       </View>

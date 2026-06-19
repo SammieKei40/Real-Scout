@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useMemo } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Animated, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { FilterValues } from "../explore/filter-modal";
+import { useFadeSlideIn } from "../../hooks/use-animations";
 import FeaturedCard from "./featured-card";
 
 const FEATURED_PROPERTIES = [
@@ -67,6 +68,8 @@ interface FeaturedSectionProps {
 }
 
 export default function FeaturedSection({ searchQuery = "", activeFilters }: FeaturedSectionProps) {
+  const { opacity: headerOpacity, translateY: headerTranslateY } = useFadeSlideIn(0);
+
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return FEATURED_PROPERTIES.filter((p) => {
@@ -81,12 +84,15 @@ export default function FeaturedSection({ searchQuery = "", activeFilters }: Fea
   return (
     <View className="mt-7 gap-4">
       {/* Section header */}
-      <View className="flex-row items-center justify-between px-5">
+      <Animated.View
+        className="flex-row items-center justify-between px-5"
+        style={{ opacity: headerOpacity, transform: [{ translateY: headerTranslateY }] }}
+      >
         <Text className="font-rubik-semibold text-black-russian text-xl">Featured</Text>
         <TouchableOpacity activeOpacity={0.7}>
           <Text className="font-rubik-medium text-purple text-sm">See All</Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
 
       {/* Horizontal scroll or empty state */}
       {filtered.length === 0 ? (
@@ -103,7 +109,7 @@ export default function FeaturedSection({ searchQuery = "", activeFilters }: Fea
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 20, gap: 16 }}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <FeaturedCard
               id={item.id}
               name={item.name}
@@ -112,6 +118,7 @@ export default function FeaturedSection({ searchQuery = "", activeFilters }: Fea
               rating={item.rating}
               category={item.category}
               image={item.image}
+              animationIndex={index}
             />
           )}
         />
